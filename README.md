@@ -1,2 +1,5 @@
 # langchain-app
- My first LLM powered app built with langchain, ask questions using youtube video as your knowledge base
+
+My first LLM powered app built with langchain.
+
+It returns a summary of Youtube videos

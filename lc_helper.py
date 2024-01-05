@@ -21,27 +21,25 @@ def ceate_vector_db_from_youtube(video_url: str) -> DocArrayInMemorySearch:
     db = DocArrayInMemorySearch.from_documents(docs, embeddings)
     return db
 
-def get_response_from_query(db, query, k=4):
-    docs = db.similarity_search(query, k=k)
+def get_response_from_query(db, k=4):
+    docs = db.similarity_search( k=k)
     docs_page_content = " ".join([d.page_content for d in docs])
 
     llm = OpenAI(model="text-davinci-003")
     prompt = PromptTemplate(
-        input_variables=["question", "docs"],
+        input_variables=["docs"],
         template="""
-        You are a helpful youtube assistant that can answer questions about videos based on a youtube's transcript.
+        You are a helpful youtube assistant that can give a detailed summary and highlight key points of youtube videos based on a youtube's transcript.
 
-        Answer the following questions: {question}
         By searching the following transcript: {docs}
 
-        Only use the factal information from the transcripts to answer the questions.input_types.
+        Only use the factal information from the transcripts to give replies.
 
-        If you don't have enough information to answer the question, say "I don't know".
-        Your answers should be detailed
+        Your replies should be detailed.
         """
     )
 
     chain = LLMChain(llm=llm, prompt=prompt)
-    response = chain.run(question=query, docs=docs_page_content)
+    response = chain.run(docs=docs_page_content)
     response = response.replace("\n", "")
     return response
