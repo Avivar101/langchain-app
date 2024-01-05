@@ -22,7 +22,8 @@ def ceate_vector_db_from_youtube(video_url: str) -> DocArrayInMemorySearch:
     return db
 
 def get_response_from_query(db, k=4):
-    docs = db.similarity_search( k=k)
+    query = "Return Detailed Summary"
+    docs = db.similarity_search(query, k=k)
     docs_page_content = " ".join([d.page_content for d in docs])
 
     llm = OpenAI(model="text-davinci-003")
@@ -40,6 +41,6 @@ def get_response_from_query(db, k=4):
     )
 
     chain = LLMChain(llm=llm, prompt=prompt)
-    response = chain.run(docs=docs_page_content)
+    response = chain.run(question=query, docs=docs_page_content)
     response = response.replace("\n", "")
     return response
