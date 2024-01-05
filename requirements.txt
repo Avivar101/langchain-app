@@ -13,4 +13,5 @@ pip==23.3.2
 pydantic==1.10.13
 python-dotenv==1.0.0
 streamlit==1.29.0
+tiktoken==0.1.1
 youtube-transcript-api==0.6.2
